@@ -1,0 +1,69 @@
+const homes = [
+  {
+    id: 1,
+    type: 'Apartment',
+    description: 'Well furnished apartment'
+  },
+  {
+    id: 2,
+    type: 'Flat',
+    description: 'Well furnished apartment'
+  }
+]
+
+app.get('/', (req, res) => {
+  res.send('Welcome to Express')
+})
+
+app.get('/api/listing', (req, res) => {
+  res.send(homes)
+})
+
+app.get('/api/listing/:id', (req, res) => {
+  const home = homes.find(home => home.id === parseInt(req.params.id))
+  if (!home) {
+    res.status(404).send('The home with the given ID does not exist')
+  }
+  res.send(home)
+})
+
+app.post('/api/listing', (req, res) => {
+  if (!req.body.type || !req.body.description) {
+    return res.status(400).send('Title and/or Description is required')
+  }
+  const home = {
+    id: homes.length + 1,
+    type: req.body.type,
+    description: req.body.description
+  }
+  homes.push(home)
+  res.send(home)
+})
+
+app.put('/api/listing/:id', (req, res) => {
+  const home = homes.find(home => home.id === parseInt(req.params.id))
+  if (!home) {
+    res.status(404).send('The home with the given ID does not exist')
+  }
+
+  if (!req.body.type || !req.body.description) {
+    return res.status(400).send('Title and/or Description is required')
+  }
+
+  home.type = req.body.type
+  home.description = req.body.description
+
+  res.send(home)
+})
+
+app.delete('/api/listing/:id', (req, res) => {
+  const home = homes.find(home => home.id === parseInt(req.params.id))
+  if (!home) {
+    res.status(404).send('The home with the given ID does not exist')
+  }
+
+  const index = homes.indexOf(home)
+  homes.splice(index, 1)
+
+  res.send(home)
+})
