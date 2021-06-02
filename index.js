@@ -1,9 +1,16 @@
+const https = require('https')
+const fs = require('fs')
 const express = require('express')
 const mongoose = require('mongoose')
 
 const houses = require('./routes/houses')
 
 const app = express()
+
+const options = {
+    key: fs.readFileSync('server.key'), 
+    cert: fs.readFileSync('server.cer')
+}
 
 app.use(express.json())
 
@@ -21,8 +28,16 @@ require('dotenv').config()
 
 const port = process.env.PORT || 3000
 
-mongoose.connect('mongodb+srv://okumu:O9o5LXrsLYxRUkBC@cluster0.v5lde.mongodb.net/house_app?retryWrites=true&w=majority')
-  .then(result => {
-    app.listen(port, () => console.log(`Server is running on port ${port}`))
-  })
+mongoose.connect('mongodb+srv://okumu:T5tiSj5i6QGSBwwp@cluster0.v5lde.mongodb.net/house_app?retryWrites=true&w=majority')
+  .then(https.createServer(options, app).listen(port,() => {
+    console.log(`Server is running on port ${port}`)
+}))
   .catch(err => console.log(err))
+  
+  
+
+//mongoose.connect('mongodb+srv://okumu:T5tiSj5i6QGSBwwp@cluster0.v5lde.mongodb.net/house_app?retryWrites=true&w=majority')
+//  .then(result => {
+//    app.listen(port, () => console.log(`Server is running on port ${port}`))
+//  })
+//  .catch(err => console.log(err))
