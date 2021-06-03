@@ -5,8 +5,6 @@ const houses = require('./routes/houses')
 
 const app = express()
 
-
-
 app.use(express.json())
 
 // Enables CORS
@@ -23,8 +21,8 @@ require('dotenv').config()
 
 const port = process.env.PORT || 3000
 
-mongoose.connect('mongodb+srv://okumu:T5tiSj5i6QGSBwwp@cluster0.v5lde.mongodb.net/house_app?retryWrites=true&w=majority')
-  .then(result => {
+mongoose.connect(`${process.env.DATABASE}`, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
     app.listen(port, () => console.log(`Server is running on port ${port}`))
   })
   .catch(err => console.log(err))
